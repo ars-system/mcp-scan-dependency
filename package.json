@@ -1,6 +1,6 @@
 {
   "name": "mcp-scan-dependency",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MCP server for scanning dependency vulnerabilities in JS/TS/Python projects with intelligent package recommendations",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
