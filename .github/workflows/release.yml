@@ -1,0 +1,85 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_type:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests and linting
+        run: |
+          npm run lint
+          npm run build
+
+      - name: Bump version
+        run: npm version ${{ github.event.inputs.version_type }} -m "chore: release v%s"
+
+      - name: Get new version
+        id: version
+        run: echo "new_version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Update CHANGELOG
+        run: |
+          echo "## [${{ steps.version.outputs.new_version }}] - $(date +%Y-%m-%d)" >> CHANGELOG.tmp
+          echo "" >> CHANGELOG.tmp
+          echo "### Changed" >> CHANGELOG.tmp
+          echo "- Version bump to ${{ steps.version.outputs.new_version }}" >> CHANGELOG.tmp
+          echo "" >> CHANGELOG.tmp
+          cat CHANGELOG.md >> CHANGELOG.tmp
+          mv CHANGELOG.tmp CHANGELOG.md
+
+      - name: Commit changes
+        run: |
+          git add CHANGELOG.md
+          git commit --amend --no-edit
+
+      - name: Push changes
+        run: git push --follow-tags
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version.outputs.new_version }}
+          release_name: Release v${{ steps.version.outputs.new_version }}
+          body: |
+            Release version ${{ steps.version.outputs.new_version }}
+            
+            See [CHANGELOG.md](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details.
+          draft: false
+          prerelease: false

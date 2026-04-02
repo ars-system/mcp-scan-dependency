@@ -1,0 +1,29 @@
+# Source files
+src/
+tsconfig.json
+eslint.config.mjs
+
+# Development files
+*.test.ts
+*.spec.ts
+__tests__/
+coverage/
+
+# IDE
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitignore
+
+# CI/CD
+.github/
+
+# Documentation (keep only essential)
+*.md
+!README.md
+
+# Misc
+.DS_Store
+*.log

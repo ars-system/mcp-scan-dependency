@@ -1,0 +1,68 @@
+{
+  "name": "mcp-scan-dependency",
+  "version": "1.0.0",
+  "description": "MCP server for scanning dependency vulnerabilities in JS/TS/Python projects with intelligent package recommendations",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "mcp-scan-dependency": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "dev": "tsx src/index.ts",
+    "prepare": "husky",
+    "lint": "eslint \"**/*.{ts,tsx}\" --max-warnings 0",
+    "lint:fix": "eslint \"**/*.{ts,tsx}\" --fix",
+    "test": "jest",
+    "prepublishOnly": "npm run build",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md,yml,yaml}\""
+  },
+  "keywords": [
+    "mcp",
+    "security",
+    "vulnerability",
+    "npm-audit",
+    "pip-audit",
+    "dependency-scanning",
+    "model-context-protocol"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ars-system/mcp-scan-dependency.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ars-system/mcp-scan-dependency/issues"
+  },
+  "homepage": "https://github.com/ars-system/mcp-scan-dependency#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@typescript-eslint/eslint-plugin": "^8.58.0",
+    "@typescript-eslint/parser": "^8.58.0",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}
