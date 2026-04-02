@@ -10,7 +10,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       id-token: write
 
     steps:
@@ -23,8 +23,20 @@ jobs:
           node-version: "20"
           registry-url: "https://registry.npmjs.org"
 
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
       - name: Install dependencies
         run: npm ci
+
+      - name: Bump version
+        run: |
+          npm version patch -m "chore: bump version to %s [skip ci]"
+
+      - name: Push version change
+        run: git push --follow-tags
 
       - name: Run linting
         run: npm run lint
