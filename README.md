@@ -1,49 +1,56 @@
 # MCP Dependency Scanner
 
-A production-grade Model Context Protocol (MCP) server for scanning JavaScript/TypeScript and Python projects for dependency vulnerabilities. This tool helps LLMs provide intelligent security recommendations by detecting vulnerable packages and suggesting safer alternatives.
+Hey there! 👋 This is a Model Context Protocol (MCP) server that helps you keep your JavaScript/TypeScript and Python projects secure by scanning for dependency vulnerabilities. Think of it as a security guard for your dependencies - it finds vulnerable packages and suggests better alternatives.
 
-## Features
+Built to work seamlessly with AI assistants like Claude, this tool makes security recommendations intelligent and actionable.
 
-- 🔍 **Multi-Language Support**: Scans JavaScript/TypeScript (using `npm audit`) and Python (using `pip-audit`) projects
-- 🎯 **Intelligent Detection**: Automatically detects project type and package managers
-- 🚨 **Severity Classification**: Categorizes vulnerabilities by severity (Critical, High, Moderate, Low, Info)
-- 💡 **Smart Recommendations**: Suggests alternative packages for vulnerable dependencies
-- 📊 **Flexible Output**: Supports detailed reports, summaries, and JSON formats
-- 🔒 **Production Ready**: Comprehensive error handling, TypeScript strict mode, and extensive validation
+## What Can It Do?
 
-## Installation
+- 🔍 **Multi-Language Support** - Works with JavaScript/TypeScript (via `npm audit`) and Python (via `pip-audit`) projects
+- 🎯 **Smart Detection** - Automatically figures out what kind of project you're working on
+- 🚨 **Severity Levels** - Tells you what's critical and what can wait (Critical → High → Moderate → Low → Info)
+- 💡 **Better Alternatives** - Suggests safer packages you can use instead of vulnerable ones
+- 📊 **Flexible Reports** - Get detailed reports, quick summaries, or raw JSON - your choice
+- 🔒 **Battle-Tested** - Built with TypeScript strict mode and comprehensive error handling
 
-### As a Global Package
+## Getting Started
+
+### Quick Install
+
+Install it globally and you're ready to go:
 
 ```bash
 npm install -g mcp-scan-dependency
 ```
 
-### As a Dependency
+Or add it to your project:
 
 ```bash
 npm install mcp-scan-dependency
 ```
 
-### From Source
+### Building from Source
+
+Prefer to build it yourself? No problem:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/ars-system/mcp-scan-dependency.git
 cd mcp-scan-dependency
 npm install
 npm run build
 ```
 
-## Prerequisites
+## What You'll Need
 
 ### For JavaScript/TypeScript Projects
-- Node.js >= 18.0.0
-- npm (comes with Node.js)
+
+- Node.js 18.0.0 or newer (npm comes bundled with it)
 
 ### For Python Projects
-- Python >= 3.8
-- pip
-- pip-audit (install with: `pip install pip-audit`)
+
+- Python 3.8 or newer
+- pip (usually comes with Python)
+- pip-audit - Install it with: `pip install pip-audit`
 
 ## Usage
 
@@ -81,6 +88,7 @@ Or if installed globally:
 Scans a project for dependency vulnerabilities.
 
 **Parameters:**
+
 - `projectPath` (required): Absolute path to the project directory
 - `minSeverity` (optional): Minimum severity level to report (`info`, `low`, `moderate`, `high`, `critical`)
 - `suggestAlternatives` (optional): Whether to suggest alternative packages (default: `true`)
@@ -115,6 +123,7 @@ Scans a project for dependency vulnerabilities.
 Detects project type and validates tool availability.
 
 **Parameters:**
+
 - `projectPath` (required): Absolute path to the project directory
 
 **Example Usage:**
@@ -266,11 +275,13 @@ mcp-scan-dependency/
 The server includes a curated database of safer package alternatives:
 
 ### JavaScript/TypeScript
+
 - `request` → `axios`, `node-fetch`, `got`
 - `moment` → `dayjs`, `date-fns`, `luxon`
 - `lodash` → `lodash-es`, `ramda`, `rambda`
 
 ### Python
+
 - `requests` → `httpx`, `aiohttp`
 - `pyyaml` → `ruamel.yaml`, `strictyaml`
 - `flask` → `fastapi`, `starlette`
@@ -278,6 +289,7 @@ The server includes a curated database of safer package alternatives:
 ## Error Handling
 
 The server provides comprehensive error handling:
+
 - Invalid project paths
 - Missing package manager files
 - Tool availability issues
@@ -293,45 +305,44 @@ All errors are returned in a structured format suitable for LLM interpretation.
 - **No Network Dependency**: Works offline with cached vulnerability databases
 - **Isolated Execution**: Scans don't modify project files
 
-## GitHub Actions & CI/CD
+## Deployment
 
-This project includes automated workflows for continuous integration and npm publishing:
+We keep things simple here. Every time you push to the `main` branch, the package automatically gets published to npm. That's it!
 
-### Workflows
+### How It Works
 
-- **CI** (`ci.yml`): Runs on push/PR, tests across multiple OS and Node versions
-- **Publish** (`publish.yml`): Automatically publishes to npm on GitHub releases
-- **Release** (`release.yml`): Manages version bumping and release creation
+The GitHub Action workflow (`.github/workflows/publish.yml`) automatically:
 
-### Publishing to npm
+1. Runs linting checks to make sure code quality is good
+2. Builds the TypeScript project
+3. Publishes to npm using the `NPM_TOKEN` secret
 
-1. **Setup**: Add `NPM_TOKEN` to GitHub repository secrets
-2. **Release**: Create a GitHub release or run the Release workflow
-3. **Deploy**: Package automatically publishes to npm
+### Setting Up Deployment
 
-See [`.github/DEPLOYMENT.md`](.github/DEPLOYMENT.md) for detailed deployment instructions.
+If you're forking this project, just add your `NPM_TOKEN` to the GitHub repository secrets, and you're all set. Push to main, and watch the magic happen!
 
-### Quick Publish
+**Pro tip:** Remember to bump the version in `package.json` before pushing, otherwise npm will reject the publish if that version already exists.
+
+### Manual Publishing
+
+Prefer to publish manually? You can still do it the old-fashioned way:
 
 ```bash
-# Automated via GitHub Actions
-1. Go to Actions → Release
-2. Select version type (patch/minor/major)
-3. Run workflow
-
-# Manual
 npm version patch  # or minor/major
-git push --follow-tags
-# Then create GitHub release
+npm run build
+npm publish
 ```
 
-## Contributing
+## Want to Contribute?
 
-Contributions are welcome! Please ensure:
-1. Code passes TypeScript strict checks
-2. ESLint rules are followed
-3. New features include appropriate error handling
-4. Updates maintain backward compatibility
+We'd love your help! Before submitting a PR, just make sure:
+
+1. Your code passes TypeScript's strict checks (we like type safety)
+2. ESLint is happy (pre-commit hooks will check this for you)
+3. You've added proper error handling for new features
+4. Your changes don't break existing functionality
+
+The pre-commit hooks will automatically lint and format your code when you commit, so you don't have to worry about forgetting!
 
 ## License
 
@@ -346,10 +357,12 @@ MIT License - See LICENSE file for details
 - [ ] CI/CD integration helpers
 - [ ] Support for Go, Rust, and other languages
 
-## Support
+## Need Help?
 
-For issues, questions, or contributions, please visit the GitHub repository.
+Run into issues or have questions? Head over to the [GitHub repository](https://github.com/ars-system/mcp-scan-dependency) and open an issue. We're here to help!
 
 ---
 
 **Built with ❤️ for the MCP ecosystem**
+
+Made by developers who care about security and want to make it easier for everyone.
